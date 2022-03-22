@@ -2,17 +2,15 @@ import 'package:hexaminate/hexaminate.dart';
 
 void main(List<String> arguments) {
   var api = Server();
-
-  api.on("/baru", (update) {
-    RequestApi req = RequestApi(update);
-    ResponseApi res = ResponseApi(update);
-    return res.send("update baru");
-  });
-  api.on("/azka", (update) {
-    RequestApi req = RequestApi(update);
-    ResponseApi res = ResponseApi(update);
+  api.on("/", (RequestApi req, ResponseApi res) async {
     print(req.method);
-    return res.send({"azka": "oke"});
+    print(await req.body);
+    print(req.query);
+    return res.send({"path": "root"});
+  });
+  api.on("/azka", (RequestApi req, ResponseApi res) {
+    print(req.method);
+    res.send({"Azka": "aoke"});
   });
   api.listen(
     host: "0.0.0.0",
