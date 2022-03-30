@@ -25,3 +25,8 @@
 - ## 0.0.6
 
 - Add Database.
+
+- ## 0.0.7
+
+- Add Event-Emitter.
+
