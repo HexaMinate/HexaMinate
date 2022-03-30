@@ -1,5 +1,6 @@
-part of hexaminate;
+// ignore_for_file: empty_catches
 
+part of hexaminate;
 
 class Server {
   EventEmitter emitter = EventEmitter();
@@ -18,7 +19,9 @@ class Server {
   }
 
   void listen(
-      {String host = "0.0.0.0", int port = 8080, void Function(HttpServer server)? callback}) async {
+      {String host = "0.0.0.0",
+      int port = 8080,
+      void Function(HttpServer server)? callback}) async {
     HttpServer server = await HttpServer.bind(host, port);
     if (callback != null) {
       callback(server);
@@ -132,6 +135,9 @@ class ResponseApi {
         String getType = type.toLowerCase();
         if (type == "auto") {
           if (typeof(data) == "object") {
+            try {
+              data = (json.encode(data));
+            } catch (e) {}
             response.response.headers.contentType = ContentType.json;
           }
           if (typeof(data) == "array") {
@@ -148,6 +154,11 @@ class ResponseApi {
           response.response.headers.contentType = ContentType.html;
         }
         if (getType == "json") {
+          if (typeof(data) == "object") {
+            try {
+              data = (json.encode(data));
+            } catch (e) {}
+          }
           response.response.headers.contentType = ContentType.json;
         }
         if (getType == "text") {
