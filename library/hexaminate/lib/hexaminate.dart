@@ -2,10 +2,10 @@ library hexaminate;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:eventify/eventify.dart';
 import 'dart:convert';
 import "dart:math";
 
+part 'src/eventemitter.dart';
 part 'src/database.dart';
 part 'src/server.dart';
 part 'src/utils.dart';

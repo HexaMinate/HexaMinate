@@ -2,12 +2,6 @@
   "configVersion": 2,
   "packages": [
     {
-      "name": "eventify",
-      "rootUri": "file:///home/azkadev/.pub-cache/hosted/pub.dartlang.org/eventify-1.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "lints",
       "rootUri": "file:///home/azkadev/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1",
       "packageUri": "lib/",
@@ -20,7 +14,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-30T12:03:37.321674Z",
+  "generated": "2022-03-30T12:08:46.658352Z",
   "generator": "pub",
   "generatorVersion": "2.16.0"
 }
