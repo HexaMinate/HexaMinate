@@ -30,8 +30,12 @@
 
 - Add Event-Emitter.
 
-- ## 0.0.78
+- ## 0.0.8
 
 - Add Regex & fix response json server.
+
+- ## 0.0.9
+
+- Fix database json.
 
 

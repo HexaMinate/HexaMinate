@@ -23,13 +23,14 @@ class JsonDb {
       parameters["requests"].add({"@type": "set", "new_data": new_value});
     } else {
       parameters["@type"] = "set";
-      parameters["new_value"] = new_value;
+      parameters["new_data"] = new_value;
     }
     return JsonDb(path_data: path, params: parameters);
   }
 
   JsonDb get(String key) {
-    if (parameters["@type"].toString().isNotEmpty) {
+    if (parameters["@type"].toString().isNotEmpty &&
+        parameters["@type"] != "get") {
       throw {
         "status_bool": false,
         "message": "Tolong gunakan method get sekali saja ya!"
@@ -89,6 +90,7 @@ class JsonDb {
     File fs = File(path);
     if (!await fs.exists()) {
       await fs.create(recursive: true);
+      await fs.writeAsString(json.encode({}));
       await Future.delayed(Duration(milliseconds: 10));
     }
     Map result_data = {};
@@ -98,28 +100,61 @@ class JsonDb {
     } catch (e) {}
 
     if (parameters["requests"].length == 0) {
+      if (parameters["@type"] == "set") {
+        if (typeof(parameters["new_data"]) == "object") {
+          parameters["new_data"].forEach((key, value) async {
+            result_data[key.toString()] = value;
+          });
+          await fs.writeAsString(json.encode(result_data));
+          parameters = {};
+          return true;
+        } else {
+          result_data[parameters["key"]] = parameters["new_data"];
+          await fs.writeAsString(json.encode(result_data));
+          parameters = {};
+          return true;
+        }
+      }
+
+      parameters = {};
       return false;
     }
 
     if (parameters["requests"].length == 1) {
       if (parameters["requests"][0]["@type"] == "find") {
+        parameters = {};
         return false;
+      }
+
+      if (parameters["requests"][0]["@type"] == "push") {
+        if (typeof(result_data[parameters["key"]]) == "array") {
+          result_data[parameters["key"]]
+              .add(parameters["requests"][0]["new_data"]);
+          await fs.writeAsString(json.encode(result_data));
+
+          parameters = {};
+          return true;
+        } else {
+          parameters = {};
+          return false;
+        }
       }
 
       if (parameters["requests"][0]["@type"] == "set") {
         if (typeof(parameters["requests"][0]["new_data"]) == "object") {
-          if (typeof(result_data[parameters["key"]]) != "object") {
-            result_data[parameters["key"]] = {};
-          }
           parameters["requests"][0]["new_data"].forEach((key, value) async {
-            result_data[parameters["key"]][key.toString()] = value;
+            result_data[key.toString()] = value;
           });
           await fs.writeAsString(json.encode(result_data));
+
+          parameters = {};
           return true;
         } else {
           result_data[parameters["key"]] =
               parameters["requests"][0]["new_data"];
           await fs.writeAsString(json.encode(result_data));
+
+          parameters = {};
           return true;
         }
       }
@@ -144,6 +179,8 @@ class JsonDb {
                         parameters["requests"][0]["new_data"];
                   }
                   await fs.writeAsString(json.encode(result_data));
+
+                  parameters = {};
                   return true;
                 }
               }
@@ -153,10 +190,14 @@ class JsonDb {
                 result_data[parameters["key"]][i] =
                     parameters["requests"][0]["new_data"];
                 await fs.writeAsString(json.encode(result_data));
+
+                parameters = {};
                 return true;
               }
             }
           }
+
+          parameters = {};
           return false;
         }
 
@@ -176,6 +217,8 @@ class JsonDb {
                     parameters["requests"][0]["new_data"];
               }
               await fs.writeAsString(json.encode(result_data));
+
+              parameters = {};
               return true;
             }
           }
@@ -186,9 +229,12 @@ class JsonDb {
           result_data[parameters["key"]] =
               parameters["requests"][0]["new_data"];
           await fs.writeAsString(json.encode(result_data));
+
+          parameters = {};
           return true;
         }
 
+        parameters = {};
         return false;
       }
 
@@ -202,8 +248,10 @@ class JsonDb {
               result_data_key[find_old_data["id_find_key"].toString()];
 
           if (id_find_key_res == id_find_value_res) {
+            parameters = {};
             return id_find_key_res;
           } else {
+            parameters = {};
             return false;
           }
         }
@@ -215,22 +263,59 @@ class JsonDb {
               if (loop_data[find_old_data["id_find_key"].toString()] ==
                   id_find_value_res) {
                 loop_data["index_data_JsonDb"] = i;
+
+                parameters = {};
                 return loop_data;
               }
             }
           }
         }
+        parameters = {};
         return false;
       } else {
-        if (result_data_key.contains(find_old_data)) {
+        if (Regex("(object|array)", "i").exec(typeof(result_data_key)) &&
+            result_data_key.contains(find_old_data)) {
+          parameters = {};
           return find_old_data;
         } else {
+          parameters = {};
           return false;
         }
       }
     }
 
+    parameters = {};
     return true;
+  }
+
+  get read async {
+    File fs = File(path);
+    if (!await fs.exists()) {
+      await fs.create(recursive: true);
+      await fs.writeAsString(json.encode({}));
+      await Future.delayed(Duration(milliseconds: 10));
+    }
+    Map result_data = {};
+    try {
+      String result = await fs.readAsString();
+      result_data = json.decode(result);
+    } catch (e) {}
+    return result_data;
+  }
+
+  get readSync {
+    File fs = File(path);
+    if (!fs.existsSync()) {
+      fs.createSync(recursive: true);
+      fs.writeAsStringSync(json.encode({}));
+      Duration(milliseconds: 10);
+    }
+    Map result_data = {};
+    try {
+      String result = fs.readAsStringSync();
+      result_data = json.decode(result);
+    } catch (e) {}
+    return result_data;
   }
 
   value() async {
@@ -257,6 +342,7 @@ class JsonDb {
     File fs = File(path);
     if (!await fs.exists()) {
       await fs.create(recursive: true);
+      await fs.writeAsString(json.encode({}));
       await Future.delayed(Duration(milliseconds: 10));
     }
     Map result_data = {};
@@ -266,11 +352,14 @@ class JsonDb {
     } catch (e) {}
 
     if (parameters["requests"].length == 0) {
-      return result_data[parameters["key"]];
+      var dat = result_data[parameters["key"]];
+      parameters = {};
+      return dat;
     }
 
     if (parameters["requests"].length == 1) {
       if (parameters["requests"][0]["@type"] != "find") {
+        parameters = {};
         return null;
       }
       var find_old_data = parameters["requests"][0]["old_data"];
@@ -283,8 +372,10 @@ class JsonDb {
               result_data_key[find_old_data["id_find_key"].toString()];
 
           if (id_find_key_res == id_find_value_res) {
+            parameters = {};
             return id_find_key_res;
           } else {
+            parameters = {};
             return null;
           }
         }
@@ -296,16 +387,22 @@ class JsonDb {
               if (loop_data[find_old_data["id_find_key"].toString()] ==
                   id_find_value_res) {
                 loop_data["index_data_JsonDb"] = i;
+
+                parameters = {};
                 return loop_data;
               }
             }
           }
         }
+
+        parameters = {};
         return null;
       } else {
         if (result_data_key.contains(find_old_data)) {
+          parameters = {};
           return find_old_data;
         } else {
+          parameters = {};
           return null;
         }
       }
