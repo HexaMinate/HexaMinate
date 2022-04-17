@@ -21,11 +21,9 @@ class Server {
   void listen(
       {String host = "0.0.0.0",
       int port = 8080,
-      void Function(HttpServer server)? callback}) async {
+      required void Function(HttpServer server) callback}) async {
     HttpServer server = await HttpServer.bind(host, port);
-    if (callback != null) {
-      callback(server);
-    }
+    callback(server);
     server.listen((HttpRequest req) async {
       req.response.headers.add(
         'Access-Control-Allow-Origin',
@@ -35,9 +33,7 @@ class Server {
       var getPath = req.uri.toString().toLowerCase();
       bool isFoundPath = true;
       if (!paths.contains(req.uri.toString().toLowerCase())) {
-        // ignore: unnecessary_string_escapes
-        if (RegExp("^/.*\?\$", caseSensitive: false)
-            .hasMatch(req.uri.toString().toLowerCase())) {
+        if (Regex("^/.*\?\$", "i").exec(req.uri)) {
           getPath = req.uri.toString().toLowerCase().split("?")[0];
           if (!paths.contains(getPath)) {
             isFoundPath = false;

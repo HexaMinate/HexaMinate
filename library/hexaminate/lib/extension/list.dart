@@ -23,8 +23,6 @@ extension ListLoopExtension<T> on List<T> {
   }
 }
 
-extension ListEncodeDecodeExtension<E> on List<E> {}
-
 extension ListIsTypeExtension<E> on List<E> {
   get isType {
     return runtimeType
@@ -35,18 +33,3 @@ extension ListIsTypeExtension<E> on List<E> {
         .replaceAll(RegExp(r"_"), "");
   }
 }
-
-extension ListToBooleanExtension<E> on List<E> {
-  bool get toBoolean {
-    return isNotEmpty;
-  }
-}
-/*
-
-// Source: https://stackoverflow.com/questions/17476718/how-do-get-a-random-element-from-a-list-in-dart
-extension RandomListItem<T> on List<T> {
-  T get random {
-    return "t";
-  }
-}
-*/

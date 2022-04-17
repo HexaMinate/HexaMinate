@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, non_constant_identifier_names
+
 part of hexaminate;
 
 String typeData(data) {
@@ -24,7 +26,10 @@ String typeof(data) {
       .replaceAll(RegExp("^bool\$", caseSensitive: false), "boolean");
 }
 
-bool getBoolean(data) {
+bool getBoolean(dynamic data) {
+  if (data == null) {
+    return false;
+  }
   var check = typeof(data);
   if (check == "string") {
     if (data.isNotEmpty) {
@@ -81,21 +86,47 @@ class Regex {
         dotAll: expressionList.contains("s"),
         unicode: expressionList.contains("u"),
       ).hasMatch(input);
-      
     } catch (e) {
       return false;
     }
   }
 
-  RegExp get run{
-      List expressionList = expression.toLowerCase().toArray;
-      return RegExp(
-        text,
-        caseSensitive: expressionList.contains("i") ? false : true,
-        multiLine: expressionList.contains("g"),
-        dotAll: expressionList.contains("s"),
-        unicode: expressionList.contains("u"),
-      );
+  RegExp get run {
+    List expressionList = expression.toLowerCase().toArray;
+    return RegExp(
+      text,
+      caseSensitive: expressionList.contains("i") ? false : true,
+      multiLine: expressionList.contains("g"),
+      dotAll: expressionList.contains("s"),
+      unicode: expressionList.contains("u"),
+    );
   }
+}
 
+class buffer {
+  static String base64 = "base64";
+  static String utf8 = "utf8";
+  static Encode from(String data, [String type = "utf8"]) {
+    return Encode(data, type);
+  }
+}
+
+class Encode {
+  String text;
+  String type;
+  Encode(this.text, this.type);
+
+  String toStringEncode(String type_encode) {
+    if (Regex(r"^utf8$", "i").exec(type)) {
+      if (Regex(r"^base64$", "i").exec(type_encode)) {
+        return base64.encode(utf8.encode(text));
+      }
+    }
+    if (Regex(r"^base64$", "i").exec(type)) {
+      if (Regex(r"^utf8$", "i").exec(type_encode)) {
+        return utf8.decode(base64.decode(text));
+      }
+    }
+    return text;
+  }
 }

@@ -42,3 +42,13 @@
 - ## 0.1.0
 
 - Improvment databse.
+
+
+- ## 0.1.1
+
+- add extension to boolean for all types data.
+
+
+- ## 0.1.2
+
+- fix extension to boolean null type.

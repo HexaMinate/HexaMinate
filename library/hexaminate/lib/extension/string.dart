@@ -8,7 +8,6 @@ part of hexaminate;
 *
 */
 
-extension StringEncodeDecodeExtension on String? {}
 
 extension StringIstypeExtension on String {
   get isType {
@@ -18,6 +17,12 @@ extension StringIstypeExtension on String {
         .replaceAll(RegExp(r"<.*"), "")
         .replaceAll(RegExp(r"_internallinkedhashmap"), "object")
         .replaceAll(RegExp(r"_"), "");
+  }
+
+  bool exec(value) {
+    return Regex(replace(Regex(r"\/[simgu]+$", "").run, ""),
+            replace(Regex(r".*\/", "").run, ""))
+        .exec(value);
   }
 
   String replace(RegExp regex, String new_string) {
@@ -61,9 +66,7 @@ extension StringIstypeExtension on String {
 
   List toEntities() {
     List array = [];
-    for (var i = 0; i < length; i++) {
-      
-    }
+    for (var i = 0; i < length; i++) {}
     return split(" ");
   }
 }
@@ -82,16 +85,6 @@ extension StringToIntExtension on String {
       return int.parse(this, radix: radix);
     } catch (e) {
       return int;
-    }
-  }
-}
-
-extension ToBooleanExtension on String? {
-  bool get toBoolean {
-    if (this!.isNotEmpty) {
-      return true;
-    } else {
-      return false;
     }
   }
 }
