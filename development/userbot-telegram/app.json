@@ -1,0 +1,10 @@
+{
+    "name": "Hexa-Userbot-Telegram",
+    "description": "hallo gais",
+    "buildpacks": [
+        {
+            "url": "heroku/nodejs"
+        }
+    ],
+    "stack": "heroku-20"
+}
