@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "lints",
-      "rootUri": "file:///home/hexaminate/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1",
+      "rootUri": "file:///home/hexaminate/development/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -14,7 +14,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-04-22T08:45:59.405274Z",
+  "generated": "2022-05-25T12:30:55.044982Z",
   "generator": "pub",
-  "generatorVersion": "2.16.0"
+  "generatorVersion": "2.17.0"
 }

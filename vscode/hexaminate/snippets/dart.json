@@ -1,0 +1,210 @@
+{
+	"loop json object": {
+		"prefix": "loop object",
+		"body": [
+			"Map json = {\"azka\": \"ganteng\"};",
+			"json.forEach((key, value) {",
+			"  // ignore: avoid_print",
+			"  print(key.toString());",
+			"  // ignore: avoid_print",
+			"  print(value);",
+			"});"
+		],
+		"description": "loop json object"
+	},
+	"loop json array": {
+		"prefix": "loop array",
+		"body": [
+			"List array = [];",
+			"for (var i = 0; i < array.length; i++) {",
+			"  // ignore: non_constant_identifier_names",
+			"  var loop_data = array[i];",
+			"  // ignore: avoid_print",
+			"  print(loop_data);",
+			"}"
+		],
+		"description": "loop json array"
+	},
+	"get Random Data from array": {
+		"prefix": "get Random data from array",
+		"body": [
+			"import 'dart:math';",
+			"",
+			"void main() {",
+			"  var quotes = [\"hay kamu\", \"hay aku\"];",
+			"  // ignore: avoid_print",
+			"  print(quotes[Random().nextInt(quotes.length)]);",
+			"}"
+		],
+		"description": "get Random Data from array"
+	},
+	"make image flutter from path file": {
+		"prefix": "image path",
+		"body": [
+			"Image.file(",
+			"  File(",
+			"    \"/home/azkadev/Downloads/valerie-elash-RfoISVdKM4U-unsplash.jpg\"),",
+			"    fit: BoxFit.cover,",
+			"    height: MediaQuery.of(context).size.height,",
+			"    width: MediaQuery.of(context).size.width,",
+			"),"
+		],
+		"description": "make image flutter from path file"
+	},
+	"make image flutter from internet": {
+		"prefix": "image url",
+		"body": [
+			"Image.network(",
+			"   \"https://images.unsplash.com/photo-1496440737103-cd596325d314?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=valerie-elash-RfoISVdKM4U-unsplash.jpg\",",
+			"    fit: BoxFit.cover,",
+			"    height: MediaQuery.of(context).size.height,",
+			"    width: MediaQuery.of(context).size.width,",
+			"),"
+		],
+		"description": "make image flutter from internet"
+	},
+	"create media query fast": {
+		"prefix": "mediaquery create",
+		"body": [
+			"final mediaQuery = MediaQuery.of(context);",
+			"final getHeight = mediaQuery.size.height;",
+			"final getWidht = mediaQuery.size.width;",
+			"final appbarHeight = mediaQuery.padding.top;",
+			"final bottomPadding = mediaQuery.padding.bottom;"
+		],
+		"description": "create media query fast"
+	},
+	"create app": {
+		"prefix": "create app",
+		"body": [
+			"// ignore_for_file: unused_local_variable, duplicate_ignore",
+			"",
+			"import 'dart:math';",
+			"import 'package:flutter/material.dart';",
+			"import 'package:flutter/foundation.dart';",
+			"",
+			"void main() {",
+			"  runApp(",
+			"    const MaterialApp(",
+			"      debugShowCheckedModeBanner: true,",
+			"      title: \"Azka Dev\",",
+			"      home: App(),",
+			"    ),",
+			"  );",
+			"}",
+			"",
+			"class App extends StatefulWidget {",
+			"  const App({Key? key}) : super(key: key);",
+			"  @override",
+			"  MyApp createState() => MyApp();",
+			"}",
+			"",
+			"class MyApp extends State<App> {",
+			"  late String quote;",
+			"  @override",
+			"  void initState() {",
+			"    super.initState();",
+			"    setState(() {",
+			"      // ignore: unused_local_variable",
+			"      var quotes = [\"hay kamu\", \"hay aku\"];",
+			"      quote = quotes[Random().nextInt(quotes.length)];",
+			"    });",
+			"  }",
+			"",
+			"  @override",
+			"  // ignore: duplicate_ignore, duplicate_ignore",
+			"  Widget build(BuildContext context) {",
+			"    final mediaQuery = MediaQuery.of(context);",
+			"    // ignore: unused_local_variable",
+			"    final getHeight = mediaQuery.size.height;",
+			"    final getWidth = mediaQuery.size.width;",
+			"    return MaterialApp(",
+			"      debugShowCheckedModeBanner: true,",
+			"      title: \"Home\",",
+			"      home: Center(",
+			"        child: Text(\"quote: ${quote.toString()}\"),",
+			"      ),",
+			"    );",
+			"  }",
+			"}"
+		],
+		"description": "create app"
+	},
+	"Widget Builder": {
+		"prefix": "widget builder",
+		"body": [
+			"",
+			"Builder(builder: (BuildContext context) {",
+			"    return Container();",
+			"})"
+		],
+		"description": "widget builder"
+	},
+	"Widget Column": {
+		"prefix": "widget Column",
+		"body": [
+			"",
+			"Column(",
+			"    crossAxisAlignment: CrossAxisAlignment.start,",
+			"    mainAxisAlignment: MainAxisAlignment.start,",
+			"    children: [],",
+			")",
+			""
+		],
+		"description": "widget Column"
+	},
+	"Widget Row": {
+		"prefix": "widget Row",
+		"body": [
+			"",
+			"Row(",
+			"  crossAxisAlignment: CrossAxisAlignment.start,",
+			"  mainAxisAlignment: MainAxisAlignment.start,",
+			"  children: [],",
+			")",
+			""
+		],
+		"description": "widget Row"
+	},
+	"Widget Padding": {
+		"prefix": "widget Padding",
+		"body": [
+			"",
+			"Padding(",
+			"    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),",
+			"    child: Container(),",
+			")",
+			""
+		],
+		"description": "widget Padding"
+	},
+	"Widget Text": {
+		"prefix": "widget Text",
+		"body": [
+			"",
+			"Text(",
+			"    \"Hello world\",",
+			"    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),",
+			"    textAlign: TextAlign.left,",
+			")",
+			""
+		],
+		"description": "widget Text"
+	},
+	"Widget TextButton": {
+		"prefix": "widget TextButton",
+		"body": [
+			"",
+			"TextButton(",
+			"    onPressed: () {},",
+			"    child: Text(",
+			"      \"Hello world\",",
+			"      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),",
+			"      textAlign: TextAlign.left,",
+			"    ),",
+			")",
+			""
+		],
+		"description": "widget TextButton"
+	}
+}
