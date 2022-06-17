@@ -52,3 +52,13 @@
 - ## 0.1.2
 
 - fix extension to boolean null type.
+
+
+- ## 0.1.3
+
+- Update docs and library
+- Add fetch api.
+
+- ## 0.1.4
+
+- Change dart:io to universal_io for support web.

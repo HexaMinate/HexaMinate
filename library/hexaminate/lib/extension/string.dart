@@ -8,21 +8,13 @@ part of hexaminate;
 *
 */
 
-
 extension StringIstypeExtension on String {
   get isType {
-    return runtimeType
-        .toString()
-        .toLowerCase()
-        .replaceAll(RegExp(r"<.*"), "")
-        .replaceAll(RegExp(r"_internallinkedhashmap"), "object")
-        .replaceAll(RegExp(r"_"), "");
+    return runtimeType.toString().toLowerCase().replaceAll(RegExp(r"<.*"), "").replaceAll(RegExp(r"_internallinkedhashmap"), "object").replaceAll(RegExp(r"_"), "");
   }
 
   bool exec(value) {
-    return Regex(replace(Regex(r"\/[simgu]+$", "").run, ""),
-            replace(Regex(r".*\/", "").run, ""))
-        .exec(value);
+    return Regex(replace(Regex(r"\/[simgu]+$", "").run, ""), replace(Regex(r".*\/", "").run, "")).exec(value);
   }
 
   String replace(RegExp regex, String new_string) {
@@ -65,7 +57,6 @@ extension StringIstypeExtension on String {
   }
 
   List toEntities() {
-    List array = [];
     for (var i = 0; i < length; i++) {}
     return split(" ");
   }

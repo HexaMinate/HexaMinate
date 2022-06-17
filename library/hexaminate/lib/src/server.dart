@@ -1,10 +1,10 @@
-// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches, unnecessary_type_check, non_constant_identifier_names
 
 part of hexaminate;
 
 class Server {
   EventEmitter emitter = EventEmitter();
-  List paths = [];
+  List<String> paths = [];
   Server();
 
   void on(path, void Function(RequestApi req, ResponseApi res) callback) {
@@ -13,15 +13,95 @@ class Server {
     }
     emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
       HttpRequest update = ev.eventData as HttpRequest;
-      // ignore: void_checks
       return callback(RequestApi(update), ResponseApi(update));
     });
   }
 
-  void listen(
-      {String host = "0.0.0.0",
-      int port = 8080,
-      required void Function(HttpServer server) callback}) async {
+  void get(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "get") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void post(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "post") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void delete(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "delete") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void put(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "put") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void patch(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "patch") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void head(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "head") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void options(path, void Function(RequestApi req, ResponseApi res) callback) {
+    if (!paths.contains(path)) {
+      paths.add(path);
+    }
+    emitter.on(path.toString().toLowerCase(), null, (Event ev, context) {
+      HttpRequest update = ev.eventData as HttpRequest;
+      if (update.method.toString().toLowerCase() == "options") {
+        return callback(RequestApi(update), ResponseApi(update));
+      }
+    });
+  }
+
+  void listen({String host = "0.0.0.0", int port = 8080, required void Function(HttpServer server) callback}) async {
     HttpServer server = await HttpServer.bind(host, port);
     callback(server);
     server.listen((HttpRequest req) async {
@@ -33,15 +113,36 @@ class Server {
       var getPath = req.uri.toString().toLowerCase();
       bool isFoundPath = true;
       if (!paths.contains(req.uri.toString().toLowerCase())) {
-        if (Regex("^/.*\?\$", "i").exec(req.uri)) {
+        if (Regex(r"^/.*(\\)?$", "i").exec(req.uri)) {
           getPath = req.uri.toString().toLowerCase().split("?")[0];
           if (!paths.contains(getPath)) {
-            isFoundPath = false;
+            var is_found = false;
+            for (var i = 0; i < paths.length; i++) {
+              var loop_data = paths[i];
+              try {
+                if (loop_data.contains(":")) {
+                  Iterable<Match> get_params = RegExp(r":[a-z0-9_]+", caseSensitive: false).allMatches(loop_data);
+                  var string_new = loop_data;
+                  for (final Match m in get_params) {
+                    String match = m[0]!;
+                    string_new = string_new.replace(RegExp(match, caseSensitive: false), ".*");
+                  }
+                  if (RegExp(string_new, caseSensitive: false).hasMatch(getPath)) {
+                    getPath = loop_data;
+                    is_found = true;
+                  }
+                }
+              } catch (e) {}
+            }
+            if (!is_found) {
+              isFoundPath = false;
+            }
           }
         } else {
           isFoundPath = false;
         }
       }
+
       if (isFoundPath) {
         return emitter.emit(getPath, null, req);
       } else {
@@ -55,6 +156,10 @@ class Server {
 class RequestApi {
   late HttpRequest request;
   RequestApi(this.request);
+
+  String get url {
+    return request.uri.toString().toLowerCase();
+  }
 
   String get method {
     return request.method.toString().toLowerCase();
@@ -77,11 +182,12 @@ class RequestApi {
     if (method == "post") {
       Future<String> content = utf8.decodeStream(request);
       var body = await content;
-      if (headers["content-type"][0] == "application/json; charset=utf-8") {
-        if (getBoolean(body)) {
+      if (RegExp(r"json", caseSensitive: false).hasMatch(headers["content-type"][0])) {
+        if (body is String && body.isNotEmpty) {
           try {
             return json.decode(body);
           } catch (e) {
+            print(e);
             return body;
           }
         } else {
@@ -120,44 +226,53 @@ class ResponseApi {
 
   ResponseApi type([String type = "plain/text"]) {
     isFoundType = true;
-    response.response.headers
-        .add('Content-Type', type, preserveHeaderCase: true);
+    response.response.headers.add('Content-Type', type, preserveHeaderCase: true);
     return ResponseApi(response);
   }
 
   Future<dynamic> send(dynamic data, {String type = "auto"}) async {
     if (!isFoundType) {
       if (type.isNotEmpty) {
+        bool is_set_data = false;
         String getType = type.toLowerCase();
         if (type == "auto") {
-          if (typeof(data) == "object") {
+          if (data is Map && !is_set_data) {
+            is_set_data = true;
             try {
               data = (json.encode(data));
-            } catch (e) {}
+            } catch (e) {
+              print(e);
+            }
             response.response.headers.contentType = ContentType.json;
           }
-          if (typeof(data) == "array") {
+          if (data is List && !is_set_data) {
+            is_set_data = true;
             response.response.headers.contentType = ContentType.json;
           }
-          if (typeof(data) == "string") {
+          if (data is String && !is_set_data) {
+            is_set_data = true;
             response.response.headers.contentType = ContentType.html;
           }
         }
-        if (getType == "binary") {
+        if (getType == "binary" && !is_set_data) {
+          is_set_data = true;
           response.response.headers.contentType = ContentType.binary;
         }
-        if (getType == "html") {
+        if (getType == "html" && !is_set_data) {
+          is_set_data = true;
           response.response.headers.contentType = ContentType.html;
         }
-        if (getType == "json") {
-          if (typeof(data) == "object") {
+        if (getType == "json" && !is_set_data) {
+          is_set_data = true;
+          if (data is Map) {
             try {
               data = (json.encode(data));
             } catch (e) {}
           }
           response.response.headers.contentType = ContentType.json;
         }
-        if (getType == "text") {
+        if (getType == "text" && !is_set_data) {
+          is_set_data = true;
           response.response.headers.contentType = ContentType.text;
         }
       }

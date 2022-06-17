@@ -1,12 +1,14 @@
 library hexaminate;
 
 import 'dart:async';
-import 'dart:io';
+import 'package:http/http.dart';
+import 'package:universal_io/io.dart';
 import 'dart:convert';
 import "dart:math";
 
 part 'src/eventemitter.dart';
 part 'src/database.dart';
+part 'src/fetch.dart';
 part 'src/server.dart';
 part 'src/utils.dart';
 

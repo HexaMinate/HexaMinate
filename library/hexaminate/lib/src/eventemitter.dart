@@ -40,7 +40,6 @@ class Event {
   set handled(bool val) => _handled = _handled || val;
 }
 
-
 /// The callback function to receive event notification.
 /// [ev] - [Event] event emitted by the publisher.
 /// [context] - [Object] passed while registering the subscription as context. This is useful especially when the listener want to receive context information for all future events emitted for the context.
@@ -65,7 +64,7 @@ class EventEmitter {
         _listeners.putIfAbsent(event, () => Set<Listener>());
 
     // Create new element.
-    var listener = Listener.Default(event, context, callback);
+    var listener = Listener.efault(event, context, callback);
 
 // Apply cancellation callback.
     listener._cancelCallback = () {
@@ -121,8 +120,7 @@ class EventEmitter {
 
     if (_listeners.containsKey(eventName)) {
       var subs = _listeners[eventName]!;
-      subs.removeWhere((element) =>
-          element.eventName == eventName && element.callback == callback);
+      subs.removeWhere((element) => element.eventName == eventName && element.callback == callback);
     }
   }
 
@@ -180,9 +178,9 @@ class EventEmitter {
   int get count => _listeners.length;
 
   /// Get the list of subscribers for a particular event.
-  int getListenersCount(String event) =>
-      _listeners.containsKey(event) ? _listeners[event]!.length : 0;
+  int getListenersCount(String event) => _listeners.containsKey(event) ? _listeners[event]!.length : 0;
 }
+
 /// Handler for cancelling the event registration.
 typedef CancelEvent = void Function();
 
@@ -214,7 +212,7 @@ class Listener {
   /// This will take four arguments.
   /// [eventName], [callback] are mandatory.
   /// [context] is optional.
-  Listener.Default(this.eventName, this.context, this.callback);
+  Listener.efault(this.eventName, this.context, this.callback);
 
   /// Cancel the event subscription with the subject.
   /// Eventhough the cancel method is called, listener doesn't check the cancellation of the subscription.

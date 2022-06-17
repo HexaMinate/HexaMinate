@@ -1,7 +1,7 @@
 name: hexaminate
-description: Hexaminate library.
-version: 0.1.2
-homepage: https://github.com/HexaMinate/HexaMinate/tree/main/library/hexaminate/docs
+description: HexaMinate library for create app flutter more easy and lightweight, becouse this not required other library.
+version: 0.1.4
+homepage: https://github.com/HexaMinate/HexaMinate/tree/main/library/hexaminate
 repository: https://github.com/HexaMinate/HexaMinate/tree/main/library/hexaminate
 issue_tracker: https://github.com/HexaMinate/HexaMinate/issues
 
@@ -10,3 +10,4 @@ environment:
 
 dev_dependencies:
   lints: ^1.0.0
+dependencies: {http: ^0.13.4, universal_io: ^2.0.4}

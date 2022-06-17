@@ -8,7 +8,8 @@ void main() async {
   print('Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
 
   // listen for responses from the server
-  socket.listen((Uint8List data) {
+  socket.listen(
+    (Uint8List data) {
       final serverResponse = String.fromCharCodes(data);
       print('Server: $serverResponse');
     },
